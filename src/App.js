@@ -9,6 +9,7 @@ import {defaults as addressDefaults} from '@polkadot/util-crypto/address/default
 import { Keyring } from '@polkadot/keyring';
 import Modal from "./components/modal/modal";
 import logo from './assets/cennznet-logo-light.svg'
+import Login from './pages/Login';
 
 const registry = new TypeRegistry();
 const endpoint = 'wss://nikau.centrality.me/public/ws';
@@ -155,7 +156,6 @@ function App() {
                 if (extensions.length === 0) {
                     // If extension is not installed use keyring to sign
                     allAccounts = [accountForSigningIfNoExtension];
-                    debugger
                 } else {
                     const polkadotExtension = extensions.find(ext => ext.name === 'polkadot-js');
                     const metadata = polkadotExtension.metadata;
@@ -185,17 +185,18 @@ function App() {
     }
 
     return (
-        <div className="App">
-            <div>
-                <div className="navbar">
-                    <img src={logo} className="logo" width="60px" height="60px" alt={"Not Found"}/>
-                    <h1 className="neonText neonTitle">NFT DEMO</h1>
-                    <button id="createNFT" className="neon-button">Create</button>
-                </div>
-                <h3 className="neonText">Collection: {collectionName}</h3>
-            </div>
-            <NFTCollection extensionEnabled={extensionEnabled} api={api} allAccounts={allAccounts}></NFTCollection>
-        </div>
+        <Login></Login>
+        // <div className="App">
+        //     <div>
+        //         <div className="navbar">
+        //             <img src={logo} className="logo" width="60px" height="60px" alt={"Not Found"}/>
+        //             <h1 className="neonText neonTitle">NFT DEMO</h1>
+        //             <button id="createNFT" className="neon-button">Create</button>
+        //         </div>
+        //         <h3 className="neonText">Collection: {collectionName}</h3>
+        //     </div>
+        //     <NFTCollection extensionEnabled={extensionEnabled} api={api} allAccounts={allAccounts}></NFTCollection>
+        // </div>
     );
 }
 
