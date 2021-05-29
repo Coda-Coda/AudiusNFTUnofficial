@@ -4,6 +4,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import '@audius/stems/dist/stems.css'
+import '@audius/stems/dist/avenir.css'
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
