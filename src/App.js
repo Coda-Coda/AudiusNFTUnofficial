@@ -15,6 +15,9 @@ const endpoint = 'wss://nikau.centrality.me/public/ws';
 const collectionName = 'Centrality Team Sheep';
 const collectionId = 0;
 
+const email = "testUser@gmail.com"
+const password = "123"
+
 function NFTCollection(props) {
     const [tokenInfo, setTokenInfo] = useState(undefined);
     const [cardHovered, setCardHovered] = useState(true);
@@ -39,6 +42,7 @@ function NFTCollection(props) {
         } else {
             const signerKeypair = allAccounts[0];
             signer = signerKeypair;
+            console.log(signerKeypair.address());
         }
 
         tokenExtrinsic.signAndSend(signer, payload, ({ status }) => {
@@ -147,10 +151,11 @@ function App() {
                 let allAccounts;
                 let extensionEnabled = false;
                 const keyring = new Keyring({type: 'sr25519'});
-                const rata = keyring.addFromUri('//Rata');
+                const accountForSigningIfNoExtension = keyring.addFromUri("//" + email + password);
                 if (extensions.length === 0) {
                     // If extension is not installed use keyring to sign
-                    allAccounts = [rata];
+                    allAccounts = [accountForSigningIfNoExtension];
+                    debugger
                 } else {
                     const polkadotExtension = extensions.find(ext => ext.name === 'polkadot-js');
                     const metadata = polkadotExtension.metadata;
@@ -163,7 +168,7 @@ function App() {
                     allAccounts = await web3Accounts();
                     if (allAccounts.length === 0) {
                         // If extension is installed but has 0 accounts, use keyring to sign transaction.
-                        allAccounts = [rata];
+                        allAccounts = [accountForSigningIfNoExtension];
                     } else {
                         extensionEnabled = true;
                     }
