@@ -13,7 +13,7 @@ import logo from './assets/cennznet-logo-light.svg'
 const registry = new TypeRegistry();
 const endpoint = 'wss://kong2.centrality.me/public/rata/ws';
 const collectionName = 'Centrality Team Sheep';
-const collectionId = 32;
+const collectionId = 0;
 
 function NFTCollection(props) {
     const [tokenInfo, setTokenInfo] = useState(undefined);
