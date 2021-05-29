@@ -154,11 +154,11 @@ function App() {
                 } else {
                     const polkadotExtension = extensions.find(ext => ext.name === 'polkadot-js');
                     const metadata = polkadotExtension.metadata;
-                    const checkIfMetaUpdated = localStorage.getItem(`EXTENSION_META_UPDATED`);
+                    const checkIfMetaUpdated = localStorage.getItem(`EXTENSION_META_UPDATED1`);
                     if (!checkIfMetaUpdated) {
                         const metadataDef = await extractMeta(apiInstance);
                         await metadata.provide(metadataDef);
-                        localStorage.setItem(`EXTENSION_META_UPDATED`, 'true');
+                        localStorage.setItem(`EXTENSION_META_UPDATED1`, 'true');
                     }
                     allAccounts = await web3Accounts();
                     if (allAccounts.length === 0) {
