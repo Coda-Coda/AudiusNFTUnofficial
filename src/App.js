@@ -1,8 +1,8 @@
-import "./App.css";
+//import "./App.css";
 import Creator from "./pages/Creator";
 import Fans from "./pages/Fans";
 import NFTSpace from "./pages/NFTSpace";
-
+import { ChakraProvider } from "@chakra-ui/react"
 import { TypeRegistry } from "@polkadot/types";
 import { Api as ApiPromise } from "@cennznet/api";
 import { useEffect, useState } from "react";
@@ -206,6 +206,7 @@ function App() {
   }
 
   return (
+    <ChakraProvider>
     <Router>
       <div>
         <nav style={{color: "#194D33"}}>
@@ -234,6 +235,7 @@ function App() {
         </Switch>
       </div>
     </Router>
+    </ChakraProvider>
   );
 }
 
