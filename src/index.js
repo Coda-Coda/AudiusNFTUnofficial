@@ -6,7 +6,6 @@ import reportWebVitals from './reportWebVitals';
 
 import '@audius/stems/dist/stems.css'
 import '@audius/stems/dist/avenir.css'
-import 'bulma/css/bulma.css'
 
 ReactDOM.render(
   <React.StrictMode>
