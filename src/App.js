@@ -11,7 +11,7 @@ import Modal from "./components/modal/modal";
 import logo from './assets/cennznet-logo-light.svg'
 
 const registry = new TypeRegistry();
-const endpoint = 'wss://kong2.centrality.me/public/rata/ws';
+const endpoint = 'wss://nikau.centrality.me/public/ws';
 const collectionName = 'Centrality Team Sheep';
 const collectionId = 0;
 
