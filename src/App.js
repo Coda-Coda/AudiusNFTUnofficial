@@ -46,20 +46,20 @@ function NFTCollection(props) {
       null
     );
     let payload = {};
-    let signer;
+    let globalSigner;
     // If extension is enabled use the first account from extension, else use keypair(rata) from Keyring to sign the transaction
     if (extensionEnabled) {
       const account = allAccounts[0];
       const injector = await web3FromSource(account.meta.source);
       payload = { signer: injector.signer };
-      signer = account.address;
+      globalSigner = account.address;
     } else {
       const signerKeypair = allAccounts[0];
-      signer = signerKeypair;
+      globalSigner = signerKeypair;
     }
 
     tokenExtrinsic
-      .signAndSend(signer, payload, ({ status }) => {
+      .signAndSend(globalSigner, payload, ({ status }) => {
         if (status.isInBlock) {
           console.log(
             `Completed at block hash #${status.asInBlock.toString()}`
@@ -163,6 +163,7 @@ function App() {
   const [api, setApi] = useState(undefined);
   const [allAccounts, setAllAccounts] = useState(undefined);
   const [extensionEnabled, setExtensionEnabled] = useState(false);
+  const [globalSigner, setGlobalSigner] = useState(undefined);
 
   useEffect(() => {
     if (!api) {
@@ -172,10 +173,15 @@ function App() {
         let allAccounts;
         let extensionEnabled = false;
         const keyring = new Keyring({ type: "sr25519" });
-        const rata = keyring.addFromUri("//Rata");
+        // const rata = keyring.addFromUri("//" + localStorage.getItem("userEmail") + "||" + localStorage.getItem("userPassword"));
+        const userAccount = keyring.addFromUri("//example@gmail.com||pass");
         if (extensions.length === 0) {
           // If extension is not installed use keyring to sign
-          allAccounts = [rata];
+          allAccounts = [userAccount];
+          const signerKeypair = allAccounts[0];
+          setGlobalSigner(signerKeypair);
+          console.log("User Address:");
+          console.log(signerKeypair.address);
         } else {
           const polkadotExtension = extensions.find(
             (ext) => ext.name === "polkadot-js"
@@ -192,7 +198,11 @@ function App() {
           allAccounts = await web3Accounts();
           if (allAccounts.length === 0) {
             // If extension is installed but has 0 accounts, use keyring to sign transaction.
-            allAccounts = [rata];
+            allAccounts = [userAccount];
+            const signerKeypair = allAccounts[0];
+            setGlobalSigner(signerKeypair);
+            console.log("User Address:");
+            console.log(signerKeypair.address);
           } else {
             extensionEnabled = true;
           }
@@ -227,13 +237,13 @@ function App() {
         </nav>
         <Switch>
           <Route path="/creator">
-            <Creator/>
+            <Creator signer={globalSigner}/>
           </Route>
           <Route path="/fans">
-            <Fans />
+            <Fans signer={globalSigner}/>
           </Route>
           <Route path="/">
-            <NFTSpace />
+            <NFTSpace signer={globalSigner}/>
           </Route>
         </Switch>
       </div>
