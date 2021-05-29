@@ -237,13 +237,13 @@ function App() {
         </nav>
         <Switch>
           <Route path="/creator">
-            <Creator signer={globalSigner}/>
+            <Creator signer={globalSigner} api={api}/>
           </Route>
           <Route path="/fans">
-            <Fans signer={globalSigner}/>
+            <Fans signer={globalSigner} api={api}/>
           </Route>
           <Route path="/">
-            <NFTSpace signer={globalSigner}/>
+            <NFTSpace signer={globalSigner} api={api}/>
           </Route>
         </Switch>
       </div>
