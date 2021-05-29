@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {modal} from "react-bulma-components";
+import {modal} from "@chakra-ui/react";
 
 
 const Creator = (props) => {
@@ -19,7 +19,7 @@ const Creator = (props) => {
     <div style={{ backgroundColor: "white" }}>
       <button onClick={() => setForm(true)}>Mint NFT</button>
       <div class="form-popup" id="myForm">
-        {showForm && 
+        {showForm &&
           <div class="modal">
             <div class="modal-background"></div>
             <div class="modal-content">
