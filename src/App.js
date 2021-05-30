@@ -1,9 +1,8 @@
-//import "./App.css";
 import Creator from "./pages/Creator";
 import Fans from "./pages/Fans";
 import NFTSpace from "./pages/NFTSpace";
 import Login from "./pages/Login";
-import { ChakraProvider } from "@chakra-ui/react"
+
 import { TypeRegistry } from "@polkadot/types";
 import { Api as ApiPromise } from "@cennznet/api";
 import { useEffect, useState } from "react";
@@ -16,9 +15,10 @@ import { cennznetExtensions } from "./cennznetExtensions";
 import { getSpecTypes } from "@polkadot/types-known";
 import { defaults as addressDefaults } from "@polkadot/util-crypto/address/defaults";
 import { Keyring } from "@polkadot/keyring";
-import Modal from "./components/modal/modal";
-import logo from "./assets/cennznet-logo-light.svg";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import decode from "./utils/utils";
+import { Box, ChakraProvider } from "@chakra-ui/react";
+import Sidebar from "./components/sidebar";
 
 const registry = new TypeRegistry();
 const endpoint = "wss://nikau.centrality.me/public/ws";
@@ -114,14 +114,14 @@ function NFTCollection(props) {
           </div>
         );
       })}
-      <Modal
-        title={"Add To Collection"}
-        btnId={"createNFT"}
-        nftAttributeHandler={setNftAttribute}
-        tokenOwnerHandler={setTokenOwner}
-        tokenOwnerNameHandler={setTokenOwnerName}
-        addTokenHandler={addToken}
-      />
+      {/*<Modal*/}
+            {/*    title={"Add To Collection"}*/}
+            {/*    btnId={"createNFT"}*/}
+            {/*    nftAttributeHandler={setNftAttribute}*/}
+            {/*    tokenOwnerHandler={setTokenOwner}*/}
+            {/*    tokenOwnerNameHandler={setTokenOwnerName}*/}
+            {/*    addTokenHandler={addToken}*/}
+      {/*/>*/}
     </div>
   );
 }
@@ -166,7 +166,7 @@ function App() {
   const [extensionEnabled, setExtensionEnabled] = useState(false);
   const [signer, setGlobalSigner] = useState(undefined);
   const [userLoginHelperCount, setUserLoginHelperCount] = useState(0);
-  
+
 
   useEffect(() => {
     console.log(userLoginHelperCount);
@@ -191,8 +191,8 @@ function App() {
             // console.log(localStorage.getItem("userPassword"));
 
         }
-        
-        
+
+
         if (extensions.length === 0) {
           // If extension is not installed use keyring to sign
           allAccounts = [userAccount];
@@ -238,40 +238,28 @@ function App() {
 
   return (
     <ChakraProvider>
-    <Router>
-      <div>
-        <nav style={{color: "#194D33"}}>
-          <ul>
-            <li>
-              <Link to="/">NFTSpace</Link>
-            </li>
-            <li>
-              <Link to="/Fans">Fans</Link>
-            </li>
-            <li>
-              <Link to="/creator">Creator</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-          </ul>
-        </nav>
-        <Switch>
-          <Route path="/creator">
-            <Creator signer={signer} api={api}/>
-          </Route>
-          <Route path="/fans">
-            <Fans signer={signer} api={api}/>
-          </Route>
-          <Route path="/login">
-            <Login userLoginHelperCount={userLoginHelperCount} setUserLoginHelperCount={setUserLoginHelperCount} />
-          </Route>
-          <Route path="/">
-            <NFTSpace signer={signer} api={api}/>
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+      <Router>
+        <Sidebar
+          variant="sidebar"
+        />
+
+        <Box ml={'16rem'} padding="30px">
+          <Switch>
+            <Route path="/creator">
+              <Creator signer={globalSigner} api={api}/>
+            </Route>
+            <Route path="/fans">
+              <Fans signer={globalSigner} api={api}/>
+            </Route>
+            <Route path="/login">
+              <Login userLoginHelperCount={userLoginHelperCount} setUserLoginHelperCount={setUserLoginHelperCount} />
+            </Route>
+            <Route path="/">
+              <NFTSpace signer={globalSigner} api={api}/>
+            </Route>
+          </Switch>
+        </Box>
+      </Router>
     </ChakraProvider>
   );
 }
