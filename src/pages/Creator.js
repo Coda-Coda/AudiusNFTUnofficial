@@ -25,6 +25,7 @@ import {
   RadioGroup,
   Stack,
   Radio,
+  Checkbox,
 } from "@chakra-ui/react";
 
 const Creator = (props) => {
@@ -38,6 +39,7 @@ const Creator = (props) => {
   const [address, setAddress] = useState(undefined);
   const [data, setData] = useState(undefined);
   const [dataURL, setDataURL] = useState(undefined);
+  const [charity, setCharity] = useState(undefined);
 
   //Account Data
   const [extensionEnabled, setExtensionEnabled] = useState(undefined);
@@ -64,13 +66,13 @@ const Creator = (props) => {
 
   const getCollection = async () => {
 
-    //const collectionOwnerByte = await (props.api.query.nft.collectionOwner.collectionOwner(i));
-    //const collectionNameByte = await (props.api.derive.nft.collectionName(i));
+    
 
 
     for (let i = 0;; i++) {
 
-      
+      const collectionOwnerByte = await (props.api.query.nft.collectionOwner.collectionOwner(i));
+      const collectionNameByte = await (props.api.derive.nft.collectionName(i));  
 
       const collectionOwner = decode(collectionOwnerByte);
       const collectionName = decode(collectionNameByte);
@@ -86,7 +88,7 @@ const Creator = (props) => {
       }
       
       //
-      props.api.tx.nft.createCollection(collection,{},{}).send(({ events = [], status }) => {
+      props.api.tx.nft.createCollection(localStorage.getItem("username") + "Spinly",{},{}).send(({ events = [], status }) => {
         console.log('Transaction status:', status.type);
   
         if (status.isFinalized) {
@@ -135,10 +137,6 @@ const Creator = (props) => {
           <ModalBody>
             <FormControl id="name" isRequired>
 
-              <FormLabel>Collection Name</FormLabel>
-              <Input placeholder="Collection"
-                onChange={(e) => setCollection(e.target.value)}
-              />
 
               <FormLabel>NFT Name</FormLabel>
               <Input
@@ -146,17 +144,20 @@ const Creator = (props) => {
                 onChange={(e) => setName(e.target.value)}
               />
 
-              <FormLabel>Address</FormLabel>
+              <FormLabel>Initial Owner (YOU by default)</FormLabel>
               <Input
-                placeholder="Address"
+                value={signer.address}
                 onChange={(e) => setAddress(e.target.value)}
               />
 
-              <FormLabel>Track ID</FormLabel>
+              <FormLabel>Audius Track ID</FormLabel>
               <Input
-                placeholder="Data"
+                placeholder="Last digits in Audius.co url"
                 onChange={(e) => setData(e.target.value)}
               />
+
+              <FormLabel>Donate 5% of royalties to Red Cross</FormLabel>
+              <Checkbox defaultIsChecked onChange={(e) => setCharity(e.target.value)}>Yes</Checkbox>
 
             </FormControl>
           </ModalBody>
