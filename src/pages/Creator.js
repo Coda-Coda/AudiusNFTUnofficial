@@ -45,7 +45,7 @@ const Creator = (props) => {
   
   const addToken = () =>{
 
-    const collectionId = 0;
+    const collectionId = getCollection();
 
     const tokenExtrinsic = props.api.tx.nft.mintUnique(collectionId, address, [{'Url': dataURL}, {'Text': name}], null, null);
 
@@ -61,23 +61,33 @@ const Creator = (props) => {
 
   }
 
-  const getCollection = () => {
-
+  const getCollection = async () => {
+    
     let search = true;
     let count = 0;
 
     while(search){
-      const collectionOwner = props.api.tx.nft.collectionOwner(count);
-      const collectionName = props.api.tx.nft.collectionName(count);
+      
+      const collectionOwner = await (props.api.derive.nft.collectionOwner(count));
+      const collectionName = await (props.api.derive.nft.collectionName(count));
 
-      if((signer == collectionOwner) && (collectionOwner.contains()))
+      if((props.signer == collectionOwner) && (collectionOwner.contains("Spinly"))){
+
+        //use Current collection
+        return setCollection(count)
+      }
+      else{
+
+        //Create collection
+        //will search for a collection if not given one
+        props.api.tx.nft.createCollection(collection,null,null).then(console.log)
+      }
 
       count ++;
     }
 
 
-    //will search for a collection if not given one
-    props.api.tx.nft.createCollection(collection,null,null);
+    
 
   }
   
