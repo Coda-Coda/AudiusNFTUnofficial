@@ -51,7 +51,14 @@ const Creator = (props) => {
 
     const collectionId = getCollection();
 
-    const tokenExtrinsic = props.api.tx.nft.mintUnique(collectionId, address, [{'Url': dataURL}, {'Text': name}], null, null);
+    let redCrossAddress =  '5DPLB9mDju7cVPdzgraZnmTq7uuuwUYtqY68UGqpVah1kFPu';
+    let bespokeRoyaltySchedule = {
+      entitlements: [
+        (redCrossAddress, 50000), // 5%
+      ]
+    }
+    let royalties = redCrossAddress ? charity : null;
+    const tokenExtrinsic = props.api.tx.nft.mintUnique(collectionId, address, [{'Url': "https://www.google.com/search?q=audius+song+" + data}, {'Text': data}], null, royalties);
 
 
     tokenExtrinsic.signAndSend(signer, {}, ({ status }) => {
@@ -71,7 +78,7 @@ const Creator = (props) => {
 
     for (let i = 0;; i++) {
 
-      const collectionOwnerByte = await (props.api.query.nft.collectionOwner.collectionOwner(i));
+      const collectionOwnerByte = await (props.api.query.nft.collectionOwner(i));
       const collectionNameByte = await (props.api.derive.nft.collectionName(i));  
 
       const collectionOwner = decode(collectionOwnerByte);
