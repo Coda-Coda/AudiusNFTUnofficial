@@ -186,9 +186,9 @@ function App() {
         else {
             //Use info from localstorage
             userAccount = keyring.addFromUri("//" + localStorage.getItem("userEmail") + "--" + localStorage.getItem("userPassword"));
-            console.log("When setting:");
-            console.log(localStorage.getItem("userEmail"));
-            console.log(localStorage.getItem("userPassword"));
+            // console.log("When setting:");
+            // console.log(localStorage.getItem("userEmail"));
+            // console.log(localStorage.getItem("userPassword"));
 
         }
         
