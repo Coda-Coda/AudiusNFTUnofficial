@@ -246,16 +246,16 @@ function App() {
         <Box ml={'16rem'} padding="30px">
           <Switch>
             <Route path="/creator">
-              <Creator signer={globalSigner} api={api}/>
+              <Creator signer={signer} api={api}/>
             </Route>
             <Route path="/fans">
-              <Fans signer={globalSigner} api={api}/>
+              <Fans signer={signer} api={api}/>
             </Route>
             <Route path="/login">
               <Login userLoginHelperCount={userLoginHelperCount} setUserLoginHelperCount={setUserLoginHelperCount} />
             </Route>
             <Route path="/">
-              <NFTSpace signer={globalSigner} api={api}/>
+              <NFTSpace signer={signer} api={api}/>
             </Route>
           </Switch>
         </Box>
