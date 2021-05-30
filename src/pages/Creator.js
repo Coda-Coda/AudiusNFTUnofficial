@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import decode from '../utils/utils'
 
 import {
   Button,
@@ -62,32 +63,54 @@ const Creator = (props) => {
   }
 
   const getCollection = async () => {
-    
-    let search = true;
-    let count = 0;
 
-    while(search){
+    //const collectionOwnerByte = await (props.api.query.nft.collectionOwner.collectionOwner(i));
+    //const collectionNameByte = await (props.api.derive.nft.collectionName(i));
+
+
+    for (let i = 0;; i++) {
+
       
-      const collectionOwner = await (props.api.derive.nft.collectionOwner(count));
-      const collectionName = await (props.api.derive.nft.collectionName(count));
 
-      if((props.signer == collectionOwner) && (collectionOwner.contains("Spinly"))){
+      const collectionOwner = decode(collectionOwnerByte);
+      const collectionName = decode(collectionNameByte);
 
-        //use Current collection
-        return setCollection(count)
+      console.log("Collection Owner: ",collectionOwner);
+      console.log("Collection name: ",collectionName);
+
+      if((props.signer === collectionOwner) && (collectionName.contains("spinly"))){
+
+        //Use Current Collection
+        return setCollection(i);
+
       }
-      else{
+      
+      //
+      props.api.tx.nft.createCollection(collection,{},{}).send(({ events = [], status }) => {
+        console.log('Transaction status:', status.type);
+  
+        if (status.isFinalized) {
 
-        //Create collection
-        //will search for a collection if not given one
-        props.api.tx.nft.createCollection(collection,null,null).then(console.log)
-      }
+          console.log(events);;
 
-      count ++;
+          /*console.log('Completed at block hash', status.asFinalized.toHex());
+          console.log('Events:');
+  
+          events.forEach(({ phase, event: { data, method, section } }) => {
+            console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString());
+          });*/
+  
+        }
+
+      //Create collection
+      //props.api.tx.nft.createCollection(collection,{},{}).send()
+      //return setCollection(i);
+      return setCollection(i);
+
+      })
+      
+      
     }
-
-
-    
 
   }
 
