@@ -12,7 +12,7 @@ function setPasswordToStorage(password) {
 }
 
 function setUsernameToStorage(password) {
-    localStorage.setItem('userPassword', password);
+    localStorage.setItem('username', password);
     console.log(password);
 }
 
