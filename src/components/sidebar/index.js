@@ -7,7 +7,7 @@ import {
   DrawerHeader,
   DrawerBody,
   DrawerContent,
-  VStack, css, Container,
+  VStack, css, Container, Text,
 } from '@chakra-ui/react'
 import { useLocation } from 'react-router-dom';
 import Link from "../Link";
@@ -30,16 +30,20 @@ const NavLink = ({to, active, children}) => (
   >{children}</Link>
 )
 
-const SidebarContent = ({activePath}) => (
+const SidebarContent = ({activePath}) => {
+  const user = "" ? localStorage.getItem("username") == null : "@" + localStorage.getItem("username");
+  return (
   <VStack>
     <Container marginBottom={'2rem'}>
       <Logo />
     </Container>
+    <NavLink to="/login" active={activePath === '/login'}>Login</NavLink>
     <NavLink to="/" active={activePath === '/'}>NFT Space</NavLink>
     <NavLink to="/fans" active={activePath === '/fans'}>Fans</NavLink>
     <NavLink to="/creator" active={activePath === '/creator'}>Creators</NavLink>
+    <Text>{user}</Text>
   </VStack>
-)
+)}
 
 
 const Sidebar = ({ isOpen, variant, onClose }) => {
