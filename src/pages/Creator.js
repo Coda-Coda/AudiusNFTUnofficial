@@ -42,14 +42,14 @@ const Creator = (props) => {
   const [extensionEnabled, setExtensionEnabled] = useState(undefined);
   const [allAccounts, setAllAccounts] = useState(undefined);
 
-  
+  const signer = props.signer;
+
   const addToken = () =>{
 
     const collectionId = getCollection();
 
     const tokenExtrinsic = props.api.tx.nft.mintUnique(collectionId, address, [{'Url': dataURL}, {'Text': name}], null, null);
 
-    const signer = props.signer;
 
     tokenExtrinsic.signAndSend(signer, {}, ({ status }) => {
       if (status.isInBlock) {
@@ -90,7 +90,7 @@ const Creator = (props) => {
     
 
   }
-  
+
 
   const getTrack = async (trackID) => {
     const res = await fetch(`https://discoveryprovider3.audius.co/v1/tracks/${trackID}?app_name=NFTUnoffical`)
@@ -144,12 +144,12 @@ const Creator = (props) => {
               mr={3}
               onClick={() => {
 
-                
+
                 setData(getTrack(data));
                 setForm(false);
 
                 window.alert("NFT CREATED");
-              
+
                 addToken();
               }}
             >
