@@ -10,7 +10,7 @@ const NFTSpace = ({api}) => {
     for (let i = 0;; i++) {
       const name = api.query.nft.collectionName(i)
       console.log(decode(name))
-      if (name === '0x') break;
+      if (i >= 5) break;
     }
 
     fetch('https://audius-metadata-4.figment.io/v1/users/nlGNe/tracks?app_name=EXAMPLEAPP',)
