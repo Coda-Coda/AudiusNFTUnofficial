@@ -33,10 +33,10 @@ const Creator = (props) => {
 
   //NFT Data
   const [name, setName] = useState(undefined);
-  const [nftType, setNftType] = useState(undefined);
+  const [collection, setCollection] = useState(undefined);
   const [address, setAddress] = useState(undefined);
   const [data, setData] = useState(undefined);
-  const [seriesSize, setSeriesSize] = useState(undefined);
+  const [dataURL, setDataURL] = useState(undefined);
 
   //Account Data
   const [extensionEnabled, setExtensionEnabled] = useState(undefined);
@@ -45,28 +45,13 @@ const Creator = (props) => {
   
   const addToken = () =>{
 
-    console.log(name)
-    console.log(address)
-    console.log(data)
+    const collectionId = 0;
 
-    collectionId = 0;
-
-    const tokenExtrinsic = api.tx.nft.mintUnique(collectionId, address, [{'Name':name},{'Data':data}], null, null);
-    
-
-    /*if (extensionEnabled) {
-      const account = allAccounts[0];
-      const injector = await web3FromSource(account.meta.source);
-      payload = {signer: injector.signer};
-      signer = account.address;
-    } else {
-      const signerKeypair = allAccounts[0];
-      signer = signerKeypair;
-    }*/
+    const tokenExtrinsic = props.api.tx.nft.mintUnique(collectionId, address, [{'Url': dataURL}, {'Text': name}], null, null);
 
     const signer = props.signer;
 
-    tokenExtrinsic.signAndSend(signer, null, ({ status }) => {
+    tokenExtrinsic.signAndSend(signer, {}, ({ status }) => {
       if (status.isInBlock) {
           console.log(`Completed at block hash #${status.asInBlock.toString()}`);
       }
@@ -75,30 +60,31 @@ const Creator = (props) => {
     });
 
   }
+
+  const getCollection = () => {
+
+    let search = true;
+    let count = 0;
+
+    while(search){
+      const collectionOwner = props.api.tx.nft.collectionOwner(count);
+      const collectionName = props.api.tx.nft.collectionName(count);
+
+      if((signer == collectionOwner) && (collectionOwner.contains()))
+
+      count ++;
+    }
+
+
+    //will search for a collection if not given one
+    props.api.tx.nft.createCollection(collection,null,null);
+
+  }
   
 
-  const getTrack = (trackID) => {
-
-    const headers = {
-      Accept: "application/json",
-    };
-
-    fetch(
-      `https://discoveryprovider3.audius.co/v1/tracks/${trackID}?app_name=NFTUnoffical`,
-      {
-        method: "GET",
-
-        headers: headers,
-      }
-    )
-      .then(function (res) {
-        return res.json();
-      })
-      .then(function (body) {
-        console.log(body);
-      });
-
-    return;
+  const getTrack = async (trackID) => {
+    const res = await fetch(`https://discoveryprovider3.audius.co/v1/tracks/${trackID}?app_name=NFTUnoffical`)
+    return res.json();
   };
 
   return (
@@ -115,6 +101,11 @@ const Creator = (props) => {
           <ModalCloseButton />
           <ModalBody>
             <FormControl id="name" isRequired>
+
+              <FormLabel>Collection Name</FormLabel>
+              <Input placeholder="Collection"
+                onChange={(e) => setCollection(e.target.value)}
+              />
 
               <FormLabel>NFT Name</FormLabel>
               <Input
@@ -142,31 +133,13 @@ const Creator = (props) => {
               colorScheme="ghost"
               mr={3}
               onClick={() => {
-                const headers = {
-                  Accept: "application/json",
-                };
 
-                const newData = fetch(
-                  `https://discoveryprovider3.audius.co/v1/tracks/${data}?app_name=NFTUnoffical`,
-                  {
-                    method: "GET",
-
-                    headers: headers,
-                  }
-                )
-                  .then(function (res) {
-                    return res.json();
-                  })
-                  .then(function (body) {
-                    console.log(body);
-                  });
-
-                setData(newData);
+                
+                setData(getTrack(data));
                 setForm(false);
 
                 window.alert("NFT CREATED");
-                
-
+              
                 addToken();
               }}
             >
