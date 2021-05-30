@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   Button,
   Modal,
@@ -25,9 +26,6 @@ import {
   Radio,
 } from "@chakra-ui/react";
 
-
-
-
 const Creator = (props) => {
   const [showForm, setForm] = useState(false);
   const [showSeries, setSeries] = useState(false);
@@ -35,11 +33,59 @@ const Creator = (props) => {
 
   //NFT Data
   const [name, setName] = useState(undefined);
-  const [nftType, setNftType] = useState(undefined);
+  const [collection, setCollection] = useState(undefined);
   const [address, setAddress] = useState(undefined);
   const [data, setData] = useState(undefined);
-  const [seriesSize, setSeriesSize] = useState(undefined);
+  const [dataURL, setDataURL] = useState(undefined);
 
+  //Account Data
+  const [extensionEnabled, setExtensionEnabled] = useState(undefined);
+  const [allAccounts, setAllAccounts] = useState(undefined);
+
+  
+  const addToken = () =>{
+
+    const collectionId = 0;
+
+    const tokenExtrinsic = props.api.tx.nft.mintUnique(collectionId, address, [{'Url': dataURL}, {'Text': name}], null, null);
+
+    const signer = props.signer;
+
+    tokenExtrinsic.signAndSend(signer, {}, ({ status }) => {
+      if (status.isInBlock) {
+          console.log(`Completed at block hash #${status.asInBlock.toString()}`);
+      }
+     }).catch((error) => {
+      console.log(':( transaction failed', error);
+    });
+
+  }
+
+  const getCollection = () => {
+
+    let search = true;
+    let count = 0;
+
+    while(search){
+      const collectionOwner = props.api.tx.nft.collectionOwner(count);
+      const collectionName = props.api.tx.nft.collectionName(count);
+
+      if((signer == collectionOwner) && (collectionOwner.contains()))
+
+      count ++;
+    }
+
+
+    //will search for a collection if not given one
+    props.api.tx.nft.createCollection(collection,null,null);
+
+  }
+  
+
+  const getTrack = async (trackID) => {
+    const res = await fetch(`https://discoveryprovider3.audius.co/v1/tracks/${trackID}?app_name=NFTUnoffical`)
+    return res.json();
+  };
 
   return (
     <div style={{ backgroundColor: "white" }}>
@@ -54,41 +100,51 @@ const Creator = (props) => {
           <ModalHeader>Create an NFT</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-
             <FormControl id="name" isRequired>
 
-              {/*<FormControl isDisabled={showSeries}>
-                <FormLabel>Amount of Tokens</FormLabel>
-                <NumberInput min={1}>
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                </FormControl>*/}
+              <FormLabel>Collection Name</FormLabel>
+              <Input placeholder="Collection"
+                onChange={(e) => setCollection(e.target.value)}
+              />
 
               <FormLabel>NFT Name</FormLabel>
-              <Input placeholder="Name" onChange={(e) => setName(e.target.value)} />
+              <Input
+                placeholder="Name"
+                onChange={(e) => setName(e.target.value)}
+              />
 
               <FormLabel>Address</FormLabel>
-              <Input placeholder="Address" onChange={(e) => setAddress(e.target.value)} />
+              <Input
+                placeholder="Address"
+                onChange={(e) => setAddress(e.target.value)}
+              />
 
-              <FormLabel>Data</FormLabel>
-              <Input placeholder="Data" onChange={(e) => setData(e.target.value)} />
+              <FormLabel>Track ID</FormLabel>
+              <Input
+                placeholder="Data"
+                onChange={(e) => setData(e.target.value)}
+              />
 
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button variant="blue" colorScheme="ghost" mr={3} onClick={() => {
-              console.log(name)
-              console.log(address)
-              console.log(data)
+            <Button
+              variant="blue"
+              colorScheme="ghost"
+              mr={3}
+              onClick={() => {
+
+                
+                setData(getTrack(data));
+                setForm(false);
+
+                window.alert("NFT CREATED");
               
-              setForm(false)
-              window.alert("NFT CREATED")
-            }}>Create NFT</Button>
-          
+                addToken();
+              }}
+            >
+              Create NFT
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
