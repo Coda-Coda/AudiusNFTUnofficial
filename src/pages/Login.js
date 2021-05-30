@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UnorderedList, ListItem, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, SimpleGrid, InputRightElement, Box, Button, Form, Icon, propNames } from '@chakra-ui/react';
+import { Text, UnorderedList, ListItem, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, SimpleGrid, InputRightElement, Box, Button, Form, Icon, propNames } from '@chakra-ui/react';
 
 function setEmailToStorage(email) {
     localStorage.setItem('userEmail', email);
@@ -51,6 +51,15 @@ const Login = (props) => {
             onClick={submitForm}
           >
             Submit
+          </Button>
+          <Text>  </Text>
+          <Button
+            mt={4}
+            colorScheme="teal"
+            type="submit"
+            onClick={() => window.open("https://cennznet-faucet-ui.centrality.me")}
+          >
+            Get Funds
           </Button>
         </Box>
         <Box bg="white" height="80px">
