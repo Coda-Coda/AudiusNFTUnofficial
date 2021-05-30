@@ -2,6 +2,7 @@
 import Creator from "./pages/Creator";
 import Fans from "./pages/Fans";
 import NFTSpace from "./pages/NFTSpace";
+import Login from "./pages/Login";
 import { ChakraProvider } from "@chakra-ui/react"
 import { TypeRegistry } from "@polkadot/types";
 import { Api as ApiPromise } from "@cennznet/api";
@@ -46,20 +47,20 @@ function NFTCollection(props) {
       null
     );
     let payload = {};
-    let globalSigner;
+    let signer;
     // If extension is enabled use the first account from extension, else use keypair(rata) from Keyring to sign the transaction
     if (extensionEnabled) {
       const account = allAccounts[0];
       const injector = await web3FromSource(account.meta.source);
       payload = { signer: injector.signer };
-      globalSigner = account.address;
+      signer = account.address;
     } else {
       const signerKeypair = allAccounts[0];
-      globalSigner = signerKeypair;
+      signer = signerKeypair;
     }
 
     tokenExtrinsic
-      .signAndSend(globalSigner, payload, ({ status }) => {
+      .signAndSend(signer, payload, ({ status }) => {
         if (status.isInBlock) {
           console.log(
             `Completed at block hash #${status.asInBlock.toString()}`
@@ -163,18 +164,35 @@ function App() {
   const [api, setApi] = useState(undefined);
   const [allAccounts, setAllAccounts] = useState(undefined);
   const [extensionEnabled, setExtensionEnabled] = useState(false);
-  const [globalSigner, setGlobalSigner] = useState(undefined);
+  const [signer, setGlobalSigner] = useState(undefined);
+  const [userLoginHelperCount, setUserLoginHelperCount] = useState(0);
+  
 
   useEffect(() => {
-    if (!api) {
+    console.log(userLoginHelperCount);
+    console.log(!api);
+    if (true) {
       const apiInstance = new ApiPromise({ provider: endpoint, registry });
       apiInstance.on("ready", async () => {
         const extensions = await web3Enable("my nft dapp");
         let allAccounts;
         let extensionEnabled = false;
         const keyring = new Keyring({ type: "sr25519" });
-        // const rata = keyring.addFromUri("//" + localStorage.getItem("userEmail") + "||" + localStorage.getItem("userPassword"));
-        const userAccount = keyring.addFromUri("//example@gmail.com||pass");
+        var userAccount;
+        if (localStorage.getItem("userEmail") == null || localStorage.getItem("userPassword") == null) {
+            //Use default account
+            userAccount = keyring.addFromUri("//example@gmail.com||pass");
+        }
+        else {
+            //Use info from localstorage
+            userAccount = keyring.addFromUri("//" + localStorage.getItem("userEmail") + "--" + localStorage.getItem("userPassword"));
+            console.log("When setting:");
+            console.log(localStorage.getItem("userEmail"));
+            console.log(localStorage.getItem("userPassword"));
+
+        }
+        
+        
         if (extensions.length === 0) {
           // If extension is not installed use keyring to sign
           allAccounts = [userAccount];
@@ -212,7 +230,7 @@ function App() {
         setApi(apiInstance);
       });
     }
-  });
+  }, [userLoginHelperCount]);
 
   if (!api) {
     return null;
@@ -233,17 +251,23 @@ function App() {
             <li>
               <Link to="/creator">Creator</Link>
             </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
           </ul>
         </nav>
         <Switch>
           <Route path="/creator">
-            <Creator signer={globalSigner} api={api}/>
+            <Creator signer={signer} api={api}/>
           </Route>
           <Route path="/fans">
-            <Fans signer={globalSigner} api={api}/>
+            <Fans signer={signer} api={api}/>
+          </Route>
+          <Route path="/login">
+            <Login userLoginHelperCount={userLoginHelperCount} setUserLoginHelperCount={setUserLoginHelperCount} />
           </Route>
           <Route path="/">
-            <NFTSpace signer={globalSigner} api={api}/>
+            <NFTSpace signer={signer} api={api}/>
           </Route>
         </Switch>
       </div>
