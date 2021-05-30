@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, SimpleGrid, InputRightElement, Box, Button, Form, Icon, propNames } from '@chakra-ui/react';
+import { UnorderedList, ListItem, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, SimpleGrid, InputRightElement, Box, Button, Form, Icon, propNames } from '@chakra-ui/react';
 
 function setEmailToStorage(email) {
     localStorage.setItem('userEmail', email);
@@ -52,6 +52,14 @@ const Login = (props) => {
           >
             Submit
           </Button>
+        </Box>
+        <Box bg="white" height="80px">
+        <UnorderedList fontSize="xx-large">
+            <ListItem >Lorem ipsum dolor sit amet</ListItem>
+            <ListItem>Consectetur adipiscing elit</ListItem>
+            <ListItem>Integer molestie lorem at massa</ListItem>
+            <ListItem>Facilisis in pretium nisl aliquet</ListItem>
+            </UnorderedList>
         </Box>
         </SimpleGrid>
     );

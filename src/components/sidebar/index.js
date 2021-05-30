@@ -35,6 +35,7 @@ const SidebarContent = ({activePath}) => (
     <Container marginBottom={'2rem'}>
       <Logo />
     </Container>
+    <NavLink to="/login" active={activePath === '/login'}>Login</NavLink>
     <NavLink to="/" active={activePath === '/'}>NFT Space</NavLink>
     <NavLink to="/fans" active={activePath === '/fans'}>Fans</NavLink>
     <NavLink to="/creator" active={activePath === '/creator'}>Creators</NavLink>
