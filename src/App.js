@@ -182,6 +182,7 @@ function App() {
         if (localStorage.getItem("userEmail") == null || localStorage.getItem("userPassword") == null) {
             //Use default account
             userAccount = keyring.addFromUri("//example@gmail.com||pass");
+            localStorage.setItem("username", "GoCryptoTest");
         }
         else {
             //Use info from localstorage
