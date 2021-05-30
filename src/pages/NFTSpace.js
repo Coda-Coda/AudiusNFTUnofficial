@@ -25,8 +25,8 @@ const NFTSpace = ({api}) => {
   const [nfts, setNfts] = useState([]);
 
   useEffect(() => {
-    fetchCollections(api).then(collections => setNfts(collections))
-    fetch('https://audius-metadata-4.figment.io/v1/users/nlGNe/tracks?app_name=EXAMPLEAPP',)
+    // fetchCollections(api).then(collections => setNfts(collections))
+    fetch('https://discoveryprovider.audius4.prod-us-west-2.staked.cloud/v1/tracks/trending?app_name=EXAMPLEAPP',)
       .then(res => res.json()).then(({data}) => {
       setTracks(data)
       console.log(data);
