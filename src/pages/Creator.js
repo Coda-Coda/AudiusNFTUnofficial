@@ -49,7 +49,7 @@ const Creator = (props) => {
 
   const addToken = () =>{
 
-    const collectionId = getCollection();
+    const collectionId = 174;
 
     let redCrossAddress =  '5DPLB9mDju7cVPdzgraZnmTq7uuuwUYtqY68UGqpVah1kFPu';
     let bespokeRoyaltySchedule = {
@@ -58,10 +58,10 @@ const Creator = (props) => {
       ]
     }
     let royalties = redCrossAddress ? charity : null;
-    const tokenExtrinsic = props.api.tx.nft.mintUnique(collectionId, address, [{'Url': "https://www.google.com/search?q=audius+song+" + data}, {'Text': data}], null, royalties);
+    const tokenExtrinsic = props.api.tx.nft.mintUnique(collectionId, '5Gpfyfis2ixU4zN3ApZz81wyMdWEuHoNDy58NDJ74QehPWzj', [{'Url': "https://www.google.com/search?q=audius+song+" + data}, {'Text': data}], null, royalties);
 
 
-    tokenExtrinsic.signAndSend(signer, {}, ({ status }) => {
+    tokenExtrinsic.signAndSend(props.signer, {}, ({ status }) => {
       if (status.isInBlock) {
           console.log(`Completed at block hash #${status.asInBlock.toString()}`);
       }
